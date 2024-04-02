@@ -1,28 +1,32 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.*;
-import java.util.Scanner;
-
 
 
 public class conexaoSQL {
-    public static void main(String[] args){
-        String url = "jdbc:mysql://localhost:3306/trabalho3bd";
-        String usuario = "root";
-        String senha = "1234";
-        try {
-            //conectar no banco de dados
-            Connection conexao = DriverManager.getConnection(url,usuario,senha);
-            System.out.println("conectado");
-            conexao.close();
+       private static final String url = "jdbc:mysql://localhost:3306/trabalho3bd";
+       private static final String usuario = "root";
+       private static final String senha = "1234";
+       private static Connection conexao;
+      public static Connection conectarbd() {
+          try {
+              //conectar no banco de dados
+              conexao = DriverManager.getConnection(url, usuario, senha);
+              System.out.println("conectado");
 
+          } catch(SQLException e){
+              System.out.println("erro ao se conectar ao banco" + e.getMessage());
+          }
+          return conexao;
+      }
 
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+      public static void fecharConexao(){
+          try{
+              //fechar conexao com o banco de dados
+              conexao.close();
+              System.out.println("conexao fechada");
+          } catch (SQLException e) {
+              System.out.println("erro ao fechar a conexao com o banco de dados" + e.getMessage());
+          }
+      }
 }
