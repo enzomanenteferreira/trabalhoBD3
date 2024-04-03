@@ -19,14 +19,4 @@ public class conexaoSQL {
           }
           return conexao;
       }
-
-      public static void fecharConexao(){
-          try{
-              //fechar conexao com o banco de dados
-              conexao.close();
-              System.out.println("conexao fechada");
-          } catch (SQLException e) {
-              System.out.println("erro ao fechar a conexao com o banco de dados" + e.getMessage());
-          }
-      }
 }

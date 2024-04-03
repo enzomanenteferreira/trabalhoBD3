@@ -1,0 +1,38 @@
+--tabela cliente
+CREATE TABLE Cliente(
+    id_cliente INT PRIMARY KEY,
+    nome VARCHAR(100),
+    cpf VARCHAR(14) UNIQUE,
+);
+
+--tabela tipoConta
+CREATE TABLE tipoConta(
+    id_tipoConta INT PRIMARY KEY,
+    nomeTipo VARCHAR(50)
+);
+
+
+--tabela contaBancaria
+CREATE TABLE contaBancaria(
+    id_contaBancaria INT PRIMARY KEY,
+    id_cliente INT,
+    nroConta VARCHAR(50),
+    saldo DECIMAL(15,2),
+    id_tipoConta INT,
+    FOREIGN KEY(id_cliente) REFERENCES Cliente(id_cliente),
+    FOREIGN KEY(id_tipoConta) REFERENCES tipoConta(id_tipoConta)
+);
+
+
+--tabela transações
+CREATE TABLE transacoes(
+    id_transacao INT PRIMARY KEY,
+    id_contaBancaria INT,
+    dtTransacao DATE,
+    valor DECIMAL(15,2),
+    FOREIGN KEY(id_contaBancaria) REFERENCES contaBancaria(id_contaBancaria)
+);
+
+
+
+
