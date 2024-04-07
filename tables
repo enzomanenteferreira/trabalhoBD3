@@ -269,3 +269,40 @@ CREATE TABLE IF NOT EXISTS `trab3BD`.`investimento` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 
+// INSERTS
+USE trab3BD;
+
+INSERT INTO unidadeFederativa (siglaUF, nomeUF) VALUES ('PR','Parana');
+
+INSERT INTO cidade (idCidade, nomeCidade, siglaUF) VALUES (1, 'foz', 'PR');
+
+INSERT INTO tipoLogradouro(siglaLogradouro, nomeTipo) VALUES ('AV', 'Avenida');
+
+INSERT INTO Logradouro(idLogradouro, nomeLogradouro, siglaLogradouro) VALUES (1, 'Tancredo Neves', 'AV');
+
+INSERT INTO Endereco(idEndereco, cepEndereco, nroCasa, complemento, idBairro, idCidade, idLogradouro) VALUES (1, '8586810', '10', 'apartamento', 1, 1, 1);
+
+INSERT INTO Cliente(idCliente, nomeCliente, sobrenomeCliente, cpfCliente, idEndereco) VALUES (1, 'jeferson', 'benites', '111111111',1);
+
+INSERT INTO DDD (DDD) VALUES (45);
+
+INSERT INTO TelefoneCliente(idTelefoneCliente, numTelefoneCliente, idCli, DDD) VALUES (1, '998765467', 1, 45);
+
+INSERT INTO EmailCliente(idEmailCliente, endEmail, idCliEmail) VALUES (1, 'jeferson@hotmail.com', 1);
+
+INSERT INTO Banco(idBanco, nomeBanco) VALUES (1, 'Banco do Brasil');
+
+INSERT INTO Agencia(idAgencia, nomeAgencia, idBanco) VALUES (1, '0140', 1);
+
+INSERT INTO tipoConta(idtipoConta, tipoConta) VALUES (1, 'Conta Corrente');
+
+INSERT INTO contaCliente(idcontaCliente, nroContaCliente, saldoConta, idTipoConta, idCliente, idAgencia) VALUES (1,'9289399', '15000', 1, 1, 1);
+
+INSERT INTO tipoInvestimento(idtipoInvestimento, nomeTipoInvestimento) VALUES (1, 'Renda fixa');
+
+INSERT INTO investimento(idInvestimento, nomeInvestimento, valorInvestimento, dataInvestimento, idTipoInvestimento, idContaCli) VALUES(1,'Tesouro Direto', 500, '2020-12-15',1,1);
+
+INSERT INTO tipoTransacao(idtipoTransacao, tipoTransacao) VALUES (1, 'TED');
+
+INSERT INTO transacao(idtransacao, nomeTransacao, valorTransacao, dataTransacao, idTipoTransacao,idContaCliente) VALUES (1, 'Transferencia eletronica', 230, '2015-10-25', 1, 1);
+
