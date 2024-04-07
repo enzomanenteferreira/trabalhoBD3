@@ -1,38 +1,271 @@
---tabela cliente
-CREATE TABLE Cliente(
-    id_cliente INT PRIMARY KEY,
-    nome VARCHAR(100),
-    cpf VARCHAR(14) UNIQUE,
-);
+UF
 
---tabela tipoConta
-CREATE TABLE tipoConta(
-    id_tipoConta INT PRIMARY KEY,
-    nomeTipo VARCHAR(50)
-);
+CREATE TABLE IF NOT EXISTS `trab3BD`.`unidadeFederativa` (
+  `siglaUF` VARCHAR(45) NOT NULL,
+  `nomeUF` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`siglaUF`))
+ENGINE = InnoDB
 
+cidade
 
---tabela contaBancaria
-CREATE TABLE contaBancaria(
-    id_contaBancaria INT PRIMARY KEY,
-    id_cliente INT,
-    nroConta VARCHAR(50),
-    saldo DECIMAL(15,2),
-    id_tipoConta INT,
-    FOREIGN KEY(id_cliente) REFERENCES Cliente(id_cliente),
-    FOREIGN KEY(id_tipoConta) REFERENCES tipoConta(id_tipoConta)
-);
+CREATE TABLE IF NOT EXISTS `trab3BD`.`cidade` (
+  `idcidade` INT NOT NULL,
+  `nomeCidade` VARCHAR(45) NOT NULL,
+  `siglaUF` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idcidade`),
+  INDEX `siglaUF_idx` (`siglaUF` ASC) VISIBLE,
+  CONSTRAINT `siglaUF`
+    FOREIGN KEY (`siglaUF`)
+    REFERENCES `trab3BD`.`unidadeFederativa` (`siglaUF`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
 
+tipologradouro
 
---tabela transações
-CREATE TABLE transacoes(
-    id_transacao INT PRIMARY KEY,
-    id_contaBancaria INT,
-    dtTransacao DATE,
-    valor DECIMAL(15,2),
-    FOREIGN KEY(id_contaBancaria) REFERENCES contaBancaria(id_contaBancaria)
-);
+CREATE TABLE IF NOT EXISTS `trab3BD`.`tipoLogradouro` (
+  `siglaLogradouro` VARCHAR(45) NOT NULL,
+  `nomeTipo` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`siglaLogradouro`))
+ENGINE = InnoDB
 
+logradouro
 
+CREATE TABLE IF NOT EXISTS `trab3BD`.`Logradouro` (
+  `idLogradouro` INT NOT NULL,
+  `nomeLogradouro` VARCHAR(45) NOT NULL,
+  `siglaLogradouro` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idLogradouro`),
+  INDEX `siglaLogradouro_idx` (`siglaLogradouro` ASC) VISIBLE,
+  CONSTRAINT `siglaLogradouro`
+    FOREIGN KEY (`siglaLogradouro`)
+    REFERENCES `trab3BD`.`tipoLogradouro` (`siglaLogradouro`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
 
+bairro
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`Bairro` (
+  `idBairro` INT NOT NULL,
+  `nomeBairro` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idBairro`))
+ENGINE = InnoDB
+
+endereço
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`Endereco` (
+  `idEndereco` INT NOT NULL,
+  `cepEndereco` VARCHAR(45) NOT NULL,
+  `nroCasa` VARCHAR(45) NOT NULL,
+  `complemento` VARCHAR(45) NULL,
+  `idBairro` INT NOT NULL,
+  `idCidade` INT NOT NULL,
+  `idLogradouro` INT NOT NULL,
+  PRIMARY KEY (`idEndereco`),
+  INDEX `idBairro_idx` (`idBairro` ASC) VISIBLE,
+  INDEX `idCidade_idx` (`idCidade` ASC) VISIBLE,
+  INDEX `idLogradouro_idx` (`idLogradouro` ASC) VISIBLE,
+  CONSTRAINT `idBairro`
+    FOREIGN KEY (`idBairro`)
+    REFERENCES `trab3BD`.`Bairro` (`idBairro`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `idCidade`
+    FOREIGN KEY (`idCidade`)
+    REFERENCES `trab3BD`.`cidade` (`idcidade`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `idLogradouro`
+    FOREIGN KEY (`idLogradouro`)
+    REFERENCES `trab3BD`.`Logradouro` (`idLogradouro`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+
+email
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`EmailCliente` (
+  `idEmailCliente` INT NOT NULL,
+  `endEmail` VARCHAR(45) NOT NULL,
+  `idCliEmail` INT NOT NULL,
+  PRIMARY KEY (`idEmailCliente`),
+  INDEX `idCliente_idx` (`idCliEmail` ASC) VISIBLE,
+  CONSTRAINT `idCliEmail`
+    FOREIGN KEY (`idCliEmail`)
+    REFERENCES `trab3BD`.`Cliente` (`idCliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+
+ddd
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`DDD` (
+  `DDD` INT NOT NULL,
+  PRIMARY KEY (`DDD`))
+ENGINE = InnoDB
+
+telefone
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`TelefoneCliente` (
+  `idTelefoneCliente` INT NOT NULL,
+  `numTelefoneCliente` VARCHAR(45) NOT NULL,
+  `idCli` INT NOT NULL,
+  `DDD` INT NOT NULL,
+  PRIMARY KEY (`idTelefoneCliente`),
+  INDEX `idCliente_idx` (`idCli` ASC) VISIBLE,
+  INDEX `DDD_idx` (`DDD` ASC) VISIBLE,
+  CONSTRAINT `idCli`
+    FOREIGN KEY (`idCli`)
+    REFERENCES `trab3BD`.`Cliente` (`idCliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `DDD`
+    FOREIGN KEY (`DDD`)
+    REFERENCES `trab3BD`.`DDD` (`DDD`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+
+client
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`Cliente` (
+  `idCliente` INT NOT NULL,
+  `nomeCliente` VARCHAR(45) NOT NULL,
+  `sobrenomeCliente` VARCHAR(45) NOT NULL,
+  `cpfCliente` VARCHAR(45) NOT NULL,
+  `idEndereco` INT NOT NULL,
+  PRIMARY KEY (`idCliente`),
+  INDEX `idEndereco_idx` (`idEndereco` ASC) VISIBLE,
+  CONSTRAINT `idEndereco`
+    FOREIGN KEY (`idEndereco`)
+    REFERENCES `trab3BD`.`Endereco` (`idEndereco`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+
+tipoConta
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`tipoConta` (
+  `idtipoConta` INT NOT NULL,
+  `tipoConta` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idtipoConta`))
+ENGINE = InnoDB
+
+banco
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`Banco` (
+  `idBanco` INT NOT NULL,
+  `nomeBanco` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idBanco`))
+ENGINE = InnoDB
+
+agencia
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`Agencia` (
+  `idAgencia` INT NOT NULL,
+  `nomeAgencia` VARCHAR(45) NOT NULL,
+  `idBanco` INT NOT NULL,
+  PRIMARY KEY (`idAgencia`),
+  INDEX `idBanco_idx` (`idBanco` ASC) VISIBLE,
+  CONSTRAINT `idBanco`
+    FOREIGN KEY (`idBanco`)
+    REFERENCES `trab3BD`.`Banco` (`idBanco`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+
+contaCliente
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`contaCliente` (
+  `idcontaCliente` INT NOT NULL,
+  `nroContaCliente` VARCHAR(45) NOT NULL,
+  `saldoConta` DECIMAL(10,2) NOT NULL,
+  `idTipoConta` INT NOT NULL,
+  `idCliente` INT NOT NULL,
+  `idAgencia` INT NOT NULL,
+  PRIMARY KEY (`idcontaCliente`),
+  INDEX `idTipoConta_idx` (`idTipoConta` ASC) VISIBLE,
+  INDEX `idCliente_idx` (`idCliente` ASC) VISIBLE,
+  INDEX `idAgencia_idx` (`idAgencia` ASC) VISIBLE,
+  CONSTRAINT `idTipoConta`
+    FOREIGN KEY (`idTipoConta`)
+    REFERENCES `trab3BD`.`tipoConta` (`idtipoConta`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `idCliente`
+    FOREIGN KEY (`idCliente`)
+    REFERENCES `trab3BD`.`Cliente` (`idCliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `idAgencia`
+    FOREIGN KEY (`idAgencia`)
+    REFERENCES `trab3BD`.`Agencia` (`idAgencia`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+
+tipoTransaçao
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`tipoTransacao` (
+  `idtipoTransacao` INT NOT NULL,
+  `tipoTransacao` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idtipoTransacao`))
+ENGINE = InnoDB
+
+tipoInvestimento
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`tipoInvestimento` (
+  `idtipoInvestimento` INT NOT NULL,
+  `nomeTipoInvestimento` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idtipoInvestimento`))
+ENGINE = InnoDB
+
+transaçao
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`transacao` (
+  `idtransacao` INT NOT NULL,
+  `nomeTransacao` VARCHAR(45) NOT NULL,
+  `valorTransacao` DECIMAL(10,2) NOT NULL,
+  `dataTransacao` DATE NOT NULL,
+  `idTipoTransacao` INT NOT NULL,
+  `idContaCliente` INT NOT NULL,
+  PRIMARY KEY (`idtransacao`),
+  INDEX `idTipoTransacao_idx` (`idTipoTransacao` ASC) VISIBLE,
+  INDEX `idContaCliente_idx` (`idContaCliente` ASC) VISIBLE,
+  CONSTRAINT `idTipoTransacao`
+    FOREIGN KEY (`idTipoTransacao`)
+    REFERENCES `trab3BD`.`tipoTransacao` (`idtipoTransacao`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `idContaCliente`
+    FOREIGN KEY (`idContaCliente`)
+    REFERENCES `trab3BD`.`contaCliente` (`idcontaCliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+
+investimento
+
+CREATE TABLE IF NOT EXISTS `trab3BD`.`investimento` (
+  `idinvestimento` INT NOT NULL,
+  `nomeInvestimento` VARCHAR(45) NOT NULL,
+  `valorInvestimento` DECIMAL(10,2) NOT NULL,
+  `dataInvestimento` DATE NOT NULL,
+  `idTipoInvestimento` INT NOT NULL,
+  `idContaCli` INT NOT NULL,
+  PRIMARY KEY (`idinvestimento`),
+  INDEX `idContaCliente_idx` (`idContaCli` ASC) VISIBLE,
+  INDEX `idTipoInvestimento_idx` (`idTipoInvestimento` ASC) VISIBLE,
+  CONSTRAINT `idContaCli`
+    FOREIGN KEY (`idContaCli`)
+    REFERENCES `trab3BD`.`contaCliente` (`idcontaCliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `idTipoInvestimento`
+    FOREIGN KEY (`idTipoInvestimento`)
+    REFERENCES `trab3BD`.`tipoInvestimento` (`idtipoInvestimento`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
 
