@@ -306,3 +306,49 @@ INSERT INTO tipoTransacao(idtipoTransacao, tipoTransacao) VALUES (1, 'TED');
 
 INSERT INTO transacao(idtransacao, nomeTransacao, valorTransacao, dataTransacao, idTipoTransacao,idContaCliente) VALUES (1, 'Transferencia eletronica', 230, '2015-10-25', 1, 1);
 
+//objeto relacional
+
+-- Cliente
+CREATE TYPE Cliente AS (
+    idCliente INT,
+    nomeCliente VARCHAR(45),
+    sobrenomeCliente VARCHAR(45),
+    cpfCliente VARCHAR(45)
+);
+
+-- Endereco
+CREATE TYPE Endereco AS (
+    idEndereco INT,
+    cepEndereco VARCHAR(45),
+    nroCasa VARCHAR(45),
+    complemento VARCHAR(45)
+);
+
+-- Agencia
+CREATE TYPE Agencia AS (
+    idAgencia INT,
+    nomeAgencia VARCHAR(45)
+);
+
+-- tipoConta
+CREATE TYPE tipoConta AS (
+    idtipoConta INT,
+    tipoConta VARCHAR(45)
+);
+
+-- Banco
+CREATE TYPE Banco AS (
+    idBanco INT,
+    nomeBanco VARCHAR(45)
+);
+
+CREATE TABLE contaCliente (
+    idcontaCliente SERIAL PRIMARY KEY,
+    cliente Cliente,
+    endereco Endereco,
+    agencia Agencia,
+    tipoConta tipoConta,
+    banco Banco,
+    nroContaCliente VARCHAR(45) NOT NULL,
+    saldoConta DECIMAL(10, 2) NOT NULL
+);
